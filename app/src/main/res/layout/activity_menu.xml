@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".Menu">
+
+
+    <!-- <Button
+        android:id="@+id/button2"
+        android:layout_width="251dp"
+        android:layout_height="48dp"
+        android:onClick="CallGetRouterPositionScreen"
+        android:text="Get Router position"
+        android:background="@drawable/button_bg_home"
+        android:backgroundTint="@color/lightgray"
+        app:layout_constraintBottom_toBottomOf="@+id/button3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.827" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints"
+        android:padding="30sp"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:paddingLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/previous"
+                android:onClick="CallPreviousScreen"
+                tools:ignore="ContentDescription" />
+
+
+        </LinearLayout>
+
+        <Button
+            android:layout_marginTop="40dp"
+            android:id="@+id/buttonCollection"
+            android:layout_width="300dp"
+            android:layout_height="65dp"
+            android:background="@drawable/button_bg_home"
+            android:backgroundTint="@color/lightgray"
+            android:drawableLeft="@drawable/runningman"
+            android:onClick="CallGestureRecScreen"
+            android:paddingLeft="30dp"
+            android:text="Gesture Recognition"
+            app:layout_constraintBottom_toTopOf="@+id/button3"/>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="170dp"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="170dp"
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/buttoncollection"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/button_bg_home"
+                    android:backgroundTint="@color/lightgray"
+                    android:drawableLeft="@drawable/datacollection"
+                    android:onClick="CallDataColleScreen"
+                    android:paddingLeft="25dp"
+                    app:layout_constraintBottom_toTopOf="@+id/button3"
+                    app:layout_constraintEnd_toEndOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Data"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Collection"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="170dp"
+                android:orientation="vertical"
+                android:layout_marginLeft="20dp">
+                <Button
+                    android:id="@+id/buttonpreduction"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/button_bg_home"
+                    android:backgroundTint="@color/lightgray"
+                    android:drawableLeft="@drawable/run"
+                    android:onClick="CallGestureRecScreen"
+                    android:paddingLeft="10dp"
+                    app:layout_constraintBottom_toTopOf="@+id/button3"
+                    app:layout_constraintEnd_toEndOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gesture"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Preduction"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="300dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button_bg_home"
+            android:backgroundTint="@color/lightgray"
+            android:drawableLeft="@drawable/geolocation"
+            android:gravity="center"
+            android:onClick="CallGPSScreen"
+            android:paddingLeft="30dp"
+            android:text="Geolocation"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="170dp"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="170dp"
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/buttonGPS"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/button_bg_home"
+                    android:backgroundTint="@color/lightgray"
+                    android:drawableLeft="@drawable/emplacement"
+                    android:onClick="CallGPSScreen"
+                    app:layout_constraintBottom_toTopOf="@+id/button3"
+                    android:paddingLeft="15dp"
+                    app:layout_constraintEnd_toEndOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GPS"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Position"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="170dp"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp">
+                <Button
+                    android:id="@+id/buttonWIFI"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/button_bg_home"
+                    android:backgroundTint="@color/lightgray"
+                    android:drawableLeft="@drawable/signalwifi"
+                    android:onClick="CallWifiScreen"
+                    android:paddingLeft="15dp"
+                    app:layout_constraintBottom_toTopOf="@+id/button3"
+                    app:layout_constraintEnd_toEndOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WI-Fi"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Position"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="170dp"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp">
+                <Button
+                    android:id="@+id/buttonGSM"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/button_bg_home"
+                    android:backgroundTint="@color/lightgray"
+                    android:drawableLeft="@drawable/gsmdo"
+                    android:onClick="CallGSMScreen"
+                    android:paddingLeft="15dp"
+                    app:layout_constraintBottom_toTopOf="@+id/button3"
+                    app:layout_constraintEnd_toEndOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GSM"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Position"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

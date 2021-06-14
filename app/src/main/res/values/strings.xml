@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Location</string>
+    <string name="cell_id">LAC : %1$d, CID : %2$d</string>
+    <string name="wifi_signal">SSID : %1$s, RSSI : %2$d</string>
+    <string name="ip_address">Router ip address : %1$s</string>
+    <string name="mac_address">Router mac address : %1$s</string>
+
+    <string name="x_axis"> x </string>
+
+    <string name="y_axis"> y </string>
+
+    <string name="z_axis"> z </string>
+    <string name="magnetometer">Magnetometer</string>
+    <string name="gyroscope">Gyroscope</string>
+    <string name="steps">Steps</string>
+    <string name="accelerometer">Accelerometer</string>
+    <string name="you_were">you were :</string>
+    <string name="mean_acce">Acc Mean</string>
+    <string name="mean_magne">Gyr Mean</string>
+    <string name="mean_gyro">Mag Mean</string>
+    <string-array name="spenner_geste">
+        <item>Marche</item>
+        <item>Courir</item>
+        <item>Debout</item>
+        <item>En Escalier</item>
+        <item>En Ascenseur</item>
+        <item>En Escalator</item>
+    </string-array>
+    <string-array name="spenner_time">
+        <item>5 s</item>
+        <item>10 s</item>
+        <item>15 s</item>
+        <item>20 s</item>
+    </string-array>
+</resources>
