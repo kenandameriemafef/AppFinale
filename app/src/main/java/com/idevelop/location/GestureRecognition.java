@@ -39,8 +39,12 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
 
 import com.opencsv.CSVWriter;
+import com.studioidan.httpagent.HttpAgent;
+import com.studioidan.httpagent.JsonCallback;
 
 import org.jetbrains.annotations.Contract;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -77,6 +81,10 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
     int  stepDetct = 0, delay = 20000;
     public int  StepsSave= -1;
     File file;
+    double[] resultAcc;
+    double[] resultGyro;
+    double[] resultMagn;
+
 
     LinearLayout meanLayout, accMeanField, magnMeanField, gyroMeanField;
     CheckBox checkbox_Acc, checkbox_Magn, checkbox_gyro, chechbox_steps;
@@ -87,7 +95,7 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
     EditText mTextGyroSensor_X, mTextGyroSensor_Y, mTextGyroSensor_Z;
 
     Button btnStartColl, btnTest;
-    TextView id_behavior, vStepsAccount, vStepsDetector;
+    TextView vStepsAccount, vStepsDetector, textPrediction;
 
     // texView to display mean value of each axis of each sensor
 
@@ -143,9 +151,9 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
         //XStepsD = (EditText) findViewById(R.id.StepDetector);
 
         btnStartColl = (Button) findViewById(R.id.btnStartColl);
-        //btnTest = (Button) findViewById(R.id.btnTest);
+        btnTest = (Button) findViewById(R.id.btnTest);
 
-       // id_behavior = (TextView) findViewById(R.id.id_behavior);
+        textPrediction = (TextView) findViewById(R.id.textPrediction);
         // for mean function  ----------------------------------------------------------------------
 
         disableEditText(mTextAccSensor_X);disableEditText(mTextAccSensor_Y);disableEditText(mTextAccSensor_Z);
@@ -157,7 +165,6 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
        // spinnertime = findViewById(R.id.spinnerTime);
         spinnergeste = findViewById(R.id.spinnerGeste);
         //populateSpinnerTime();
-        populateSpinnerGeste();
 
 
         final DecimalFormat form = new DecimalFormat("0.000");
@@ -244,7 +251,6 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
 
                             Log.e("listSize after collect" , " value : " + acclDataCollection.size());
                             // calculate the mean after the collection of data done
-                            double[] result;
                             double mean[] = new double[] {0,0,0};
                             for (ValuesOf_x_y_z d : acclDataCollection ){
                                 mean[0] += d.x;
@@ -264,36 +270,55 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
                                 StepDetector = 0;
                             }
                             if(acclDataCollection.size() != 0){
-                                result = meanFun(acclDataCollection, acclDataCollection.size());
-                                x_accMean = " "+ result[0];
-                                y_accMean = " "+ result[1];
-                                z_accMean = " "+ result[2];
+                                resultAcc = meanFun(acclDataCollection, acclDataCollection.size());
+                                x_accMean = " "+ resultAcc[0];
+                                y_accMean = " "+ resultAcc[1];
+                                z_accMean = " "+ resultAcc[2];
 
-                                Log.e("affichage ", " Means:  " +result[0] + " " +result[1]+ " "+ result[2]);
+                                Log.e("affichage ", " Means:  " +resultAcc[0] + " " +resultAcc[1]+ " "+ resultAcc[2]);
                                 // before clear data i should upload it to the dataBase
                                 acclDataCollection.clear();
                             }
                             Log.e("listSize after clean" , " value : " + acclDataCollection.size());
 
                             if(magnDataCollection.size() != 0){
-                                result = meanFun(magnDataCollection, magnDataCollection.size());
-                                x_magMean = " "+ result[0];
-                                y_magMean = " "+ result[1];
-                                z_magMean = " "+ result[2];
+                                resultGyro = meanFun(magnDataCollection, magnDataCollection.size());
+                                x_magMean = " "+ resultGyro[0];
+                                y_magMean = " "+ resultGyro[1];
+                                z_magMean = " "+ resultGyro[2];
 
                                 // before clear data i should upload it to the dataBase
                                 magnDataCollection.clear();
                             }
                             if(gyroDataCollection.size() != 0){
-                                result = meanFun(gyroDataCollection, gyroDataCollection.size());
-                                x_gyroMean = " "+ result[0];
-                                y_gyroMean = " "+ result[1];
-                                z_gyroMean = " "+ result[2];
+                                resultMagn = meanFun(gyroDataCollection, gyroDataCollection.size());
+                                x_gyroMean = " "+ resultMagn[0];
+                                y_gyroMean = " "+ resultMagn[1];
+                                z_gyroMean = " "+ resultMagn[2];
 
                                 // before clear data i should upload it to the dataBase
                                 gyroDataCollection.clear();
                             }
+                            HttpAgent.post("http://192.168.137.1:8080/WebServiceTest/Greeting")
+                                    .queryParams("acc_x",resultAcc[0]+"","acc_y",resultAcc[1]+"","acc_z",resultAcc[2]+""
+                                            ,"gyro_x",resultGyro[0]+"","gyro_y",resultGyro[1]+"","gyro_z",resultGyro[2]+"",
+                                            "magn_x",resultGyro[0]+"","magn_y",resultGyro[1]+"","magn_z",resultGyro[2]+"",
+                                            "steps",StepsSave + "")
+                                    .goJson(new JsonCallback() {
+                                        @Override
+                                        protected void onDone(boolean success, JSONObject jsonObject) {
+                                            Log.e("msg", "value" + jsonObject);
+//                                            try {
+//                                                Log.e("msg", "value " + jsonObject.get("Greeting"));
+//                                                textPrediction.setText(jsonObject.get("Greeting").toString());
+//                                            } catch (JSONException e) {
+//                                                e.printStackTrace();
+//                                            }
+//                                                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+//                                                    Toast.makeText(TestActivity.this, jsonArray.toString(), Toast.LENGTH_LONG).show();
 
+                                        }
+                                    });
                         }
                     }, 20000);
                 }
@@ -332,7 +357,6 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
         clearForm((ViewGroup) findViewById(R.id.meanLayout));
         clearForm((ViewGroup) findViewById(R.id.testFather));
     }
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -574,9 +598,6 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
         adapter.add("In Elevator");
         adapter.add("Select Gesture");
 
-        spinnergeste.setAdapter(adapter);
-        spinnergeste.setPrompt("Select a Gesture");
-        spinnergeste.setSelection(adapter.getCount()); //display hint
 
     }
 
@@ -615,76 +636,27 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
     private void loadData(){
     }
 
-    public void RegisterInCSVfile(View view) {
-        String x_acc = x_accMean;
-        String y_acc = y_accMean;
-        String z_acc = z_accMean;
-        String x_gyr = x_gyroMean;
-        String y_gyr = x_gyroMean;
-        String z_gyr = x_gyroMean;
-        String x_mag = x_magMean;
-        String y_mag = x_magMean;
-        String z_mag = x_magMean;
-        String c_steps = String.valueOf(StepsSave);
-
-
-        if(!accChecked){Toast.makeText(GestureRecognition.this, "Check Accelerometer", Toast.LENGTH_SHORT).show();}
-        if(!gyroChecked){Toast.makeText(GestureRecognition.this, "Check Gyroscope", Toast.LENGTH_SHORT).show();}
-        if(!magnChecked){Toast.makeText(GestureRecognition.this, "Check Magnetometer", Toast.LENGTH_SHORT).show();}
-        if(!stepsCheck){Toast.makeText(GestureRecognition.this, "Check Steps", Toast.LENGTH_SHORT).show();}
-        if (spinnergeste.getSelectedItem().toString() == "Select Gesture") {
-            Toast.makeText(GestureRecognition.this, "Select Gesture", Toast.LENGTH_SHORT).show();}
-        /*if( y_accMean.getText().toString() == " "  || y_accMean.getText().toString() == " " || z_accMean.getText().toString() == " "){
-            Toast.makeText(MainActivity.this, "Collect DATA First", Toast.LENGTH_SHORT).show(); }
-        if(gyroDataCollection.size() == 0){
-            Toast.makeText(MainActivity.this, "Collect DATA First", Toast.LENGTH_SHORT).show(); }
-        if(x_magMean == null || y_magMean == null || z_magMean == null){
-            Toast.makeText(MainActivity.this, "Collect DATA First", Toast.LENGTH_SHORT).show(); }
-        if (spinnergeste.getSelectedItem().toString() == "Select Gesture") {
-            Toast.makeText(MainActivity.this, "Select Gesture", Toast.LENGTH_SHORT).show(); }
-        if (spinnergeste.getSelectedItem().toString() != "Select Gesture" && x_accMean != null && y_accMean != null && z_accMean != null &&
-                x_gyroMean != null && y_gyroMean != null && z_gyroMean != null && x_magMean != null && y_magMean != null && z_magMean != null)*/
-        if (!spinnergeste.getSelectedItem().toString().equals("Select Gesture") &&
-                !TextUtils.isEmpty(x_acc) && !TextUtils.isEmpty(y_acc) && !TextUtils.isEmpty(z_acc) &&
-                !TextUtils.isEmpty(x_gyr) && !TextUtils.isEmpty(x_gyr) && !TextUtils.isEmpty(x_gyr) &&
-                !TextUtils.isEmpty(x_mag) && !TextUtils.isEmpty(x_mag) && !TextUtils.isEmpty(x_mag) &&
-                StepsSave != -1){
-            String Dataset = "Dataset.csv";
-            String entry = x_accMean + ";" +
-                    y_accMean + ";" +
-                    z_accMean + ";" +
-                    x_gyroMean + ";" +
-                    y_gyroMean + ";" +
-                    z_gyroMean + ";" +
-                    x_magMean + ";" +
-                    y_magMean + ";" +
-                    z_magMean + ";" +
-                    StepsSave + "; " + spinnergeste.getSelectedItem().toString();
-
-            //create File
-            file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Dataset);
-            //write to File
-            try {
-
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
-                out.println(entry);
-                out.close();
-                Toast.makeText(GestureRecognition.this, " Saved! ", Toast.LENGTH_SHORT).show();
-                x_accMean =null; y_accMean =null; z_accMean= null;
-                x_gyroMean=null ;y_gyroMean=null; z_gyroMean=null;
-                x_magMean=null ;y_magMean=null; z_magMean=null;
-                StepsSave = -1;
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                Toast.makeText(GestureRecognition.this, " File not Found! ", Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(GestureRecognition.this, " Error Saving! ", Toast.LENGTH_SHORT).show();
-            }
-
-        }else {Toast.makeText(GestureRecognition.this, "Collect DATA First", Toast.LENGTH_SHORT).show(); }
-
-    }
+//    public void predictionFunction() {
+//        HttpAgent.post("http://192.168.137.1:8080/WebServiceTest/Greeting")
+//            .queryParams("acc_x",resultAcc[0]+"","acc_y",resultAcc[1]+"","acc_z",resultAcc[2]+""
+//                    ,"gyro_x",resultGyro[0]+"","gyro_y",resultGyro[1]+"","gyro_z",resultGyro[2]+"",
+//                    "magn_x",resultGyro[0]+"","magn_y",resultGyro[1]+"","magn_z",resultGyro[2]+"")
+//            .goJson(new JsonCallback() {
+//                @Override
+//                protected void onDone(boolean success, JSONObject jsonObject) {
+//                    Log.e("msg", "value" + jsonObject);
+//                    try {
+//                        Log.e("msg", "value " + jsonObject.get("Greeting"));
+//                        textPrediction.setText(jsonObject.get("Greeting").toString());
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+////                                                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+////                                                    Toast.makeText(TestActivity.this, jsonArray.toString(), Toast.LENGTH_LONG).show();
+//
+//            }
+//        });
+//    }
 
 
     public void CallPreviousScreen(View view) {
