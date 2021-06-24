@@ -299,7 +299,7 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
                                 // before clear data i should upload it to the dataBase
                                 gyroDataCollection.clear();
                             }
-                            HttpAgent.post("http://192.168.137.1:8080/WebServiceTest/Greeting")
+                            HttpAgent.post("http://95.111.237.128:8080/WebServiceTest/Greeting")
                                     .queryParams("acc_x",resultAcc[0]+"","acc_y",resultAcc[1]+"","acc_z",resultAcc[2]+""
                                             ,"gyro_x",resultGyro[0]+"","gyro_y",resultGyro[1]+"","gyro_z",resultGyro[2]+"",
                                             "magn_x",resultGyro[0]+"","magn_y",resultGyro[1]+"","magn_z",resultGyro[2]+"",
@@ -308,12 +308,12 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
                                         @Override
                                         protected void onDone(boolean success, JSONObject jsonObject) {
                                             Log.e("msg", "value" + jsonObject);
-//                                            try {
-//                                                Log.e("msg", "value " + jsonObject.get("Greeting"));
-//                                                textPrediction.setText(jsonObject.get("Greeting").toString());
-//                                            } catch (JSONException e) {
-//                                                e.printStackTrace();
-//                                            }
+                                            try {
+                                                Log.e("msg", "value " + jsonObject.get("Greeting"));
+                                                textPrediction.setText(jsonObject.get("Greeting").toString());
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
 //                                                    JSONArray jsonArray = jsonObject.getJSONArray("data");
 //                                                    Toast.makeText(TestActivity.this, jsonArray.toString(), Toast.LENGTH_LONG).show();
 
