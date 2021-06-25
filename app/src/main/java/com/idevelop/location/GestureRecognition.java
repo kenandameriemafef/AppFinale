@@ -3,6 +3,7 @@ package com.idevelop.location;
 import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import pl.droidsonroids.gif.GifImageView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -38,6 +39,7 @@ import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.opencsv.CSVWriter;
 import com.studioidan.httpagent.HttpAgent;
 import com.studioidan.httpagent.JsonCallback;
@@ -65,13 +67,15 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
     //String
     String x_accMean,y_accMean,z_accMean,x_gyroMean,y_gyroMean,z_gyroMean,x_magMean,y_magMean,z_magMean;
 
+    LottieAnimationView image, sitting;
+    GifImageView giffile;
+
     // sensors
     private Sensor mSensorAccelerometer;
     private Sensor mSensorMagnetometer;
     private Sensor mSensorGyroscope;
     private Sensor StepsAccount;
     private Sensor StepsDetector;
-
 
     //valueStepSensor
 
@@ -85,6 +89,8 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
     double[] resultGyro;
     double[] resultMagn;
 
+    //Rapport value
+    static  String Geste;
 
     LinearLayout meanLayout, accMeanField, magnMeanField, gyroMeanField;
     CheckBox checkbox_Acc, checkbox_Magn, checkbox_gyro, chechbox_steps;
@@ -122,6 +128,11 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
         StepsAccount = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         StepsDetector = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
 
+        //lottieFiles
+        image = findViewById(R.id.image);
+        giffile = findViewById(R.id.giffile);
+
+
 
         // make the layout that have the values of mean invisible till the process finish (after 20s)
         meanLayout = (LinearLayout) findViewById(R.id.meanLayout);
@@ -151,7 +162,7 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
         //XStepsD = (EditText) findViewById(R.id.StepDetector);
 
         btnStartColl = (Button) findViewById(R.id.btnStartColl);
-        btnTest = (Button) findViewById(R.id.btnTest);
+       // btnTest = (Button) findViewById(R.id.btnTest);
 
         textPrediction = (TextView) findViewById(R.id.textPrediction);
         // for mean function  ----------------------------------------------------------------------
@@ -311,6 +322,15 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
                                             try {
                                                 Log.e("msg", "value " + jsonObject.get("Greeting"));
                                                 textPrediction.setText(jsonObject.get("Greeting").toString());
+                                                if(textPrediction.getText().toString().equals("running")){giffile.setVisibility(View.INVISIBLE);image.setVisibility(View.VISIBLE);image.setAnimation("running.json");image.playAnimation();}
+                                                if(textPrediction.getText().toString().equals("Walking")){giffile.setVisibility(View.INVISIBLE);image.setVisibility(View.VISIBLE);image.setAnimation("walking.json");image.playAnimation();}
+                                                if(textPrediction.getText().toString().equals("Standing")){giffile.setVisibility(View.INVISIBLE);image.setVisibility(View.VISIBLE);image.setAnimation("standing1.json");image.playAnimation();}
+                                                if(textPrediction.getText().toString().equals("Sitting")){giffile.setVisibility(View.INVISIBLE);image.setVisibility(View.VISIBLE);image.setAnimation("sitting.json");image.playAnimation();}
+                                                if(textPrediction.getText().toString().equals("Upstairs")){image.setVisibility(View.INVISIBLE);giffile.setVisibility(View.VISIBLE);giffile.setImageResource(R.drawable.stairup);}
+                                                if(textPrediction.getText().toString().equals("Downstairs")){image.setVisibility(View.INVISIBLE);giffile.setVisibility(View.VISIBLE);giffile.setImageResource(R.drawable.downstairs);}
+                                                if(textPrediction.getText().toString().equals("InElevator")){giffile.setVisibility(View.VISIBLE);image.setVisibility(View.INVISIBLE);image.setAnimation("ascensore.json");image.playAnimation();}
+
+                                                Geste=textPrediction.getText().toString();
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -433,14 +453,7 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
             XSteps.setText(String.valueOf(StepCounter));
         }
 
-        //StepsDetector
-        if (sensor.getType() == sensor.TYPE_STEP_DETECTOR) {
-            stepDetct = (int) (stepDetct + event.values[0]);
-            for (float val : event.values){
-                StepDetector++;
-            }
-            XStepsD.setText(String.valueOf(StepDetector));
-        }
+
 
         String textAccX;
         String textAccY;
@@ -663,6 +676,8 @@ public class GestureRecognition extends AppCompatActivity implements SensorEvent
         Intent intent = new Intent(getApplicationContext(), Menu.class);
         startActivity(intent);
     }
+
+
 }
 
 class ValuesOf_x_y_z{
@@ -673,4 +688,5 @@ class ValuesOf_x_y_z{
         this.y = y;
         this.z = z;
     }
+
 }
