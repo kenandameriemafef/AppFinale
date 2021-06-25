@@ -54,4 +54,9 @@ public class Menu extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), GetGPSPosition.class);
         startActivity(intent);
     }
+
+    public void CalllightScreen(View view) {
+        Intent intent = new Intent(getApplicationContext(), Light.class);
+        startActivity(intent);
+    }
 }
